@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 3) do
     t.integer "route_id"
     t.integer "climber_id"
     t.integer "rating"
+    t.string "date_climbed"
   end
 
   create_table "routes", force: :cascade do |t|

@@ -18,6 +18,8 @@ GEM
     concurrent-ruby (1.1.5)
     database_cleaner (1.7.0)
     equatable (0.5.0)
+    faker (2.5.0)
+      i18n (~> 1.6.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.3)
@@ -118,6 +120,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (~> 5.2)
   database_cleaner
+  faker
   pry
   rake
   require_all
