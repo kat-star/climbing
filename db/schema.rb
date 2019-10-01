@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 1) do
+ActiveRecord::Schema.define(version: 3) do
+
+  create_table "climbers", force: :cascade do |t|
+    t.string "name"
+    t.integer "age"
+    t.string "location"
+    t.integer "skill_level"
+  end
+
+  create_table "climbs", force: :cascade do |t|
+    t.integer "route_id"
+    t.integer "climber_id"
+    t.integer "rating"
+  end
 
   create_table "routes", force: :cascade do |t|
     t.string "name"
