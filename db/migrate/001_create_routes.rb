@@ -4,7 +4,7 @@ class CreateRoutes < ActiveRecord::Migration[5.2]
       t.string :name
       t.integer :difficulty
       t.string :location
-      t.string :type
+      t.string :style
     end
   end
 end

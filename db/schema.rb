@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 3) do
     t.string "name"
     t.integer "difficulty"
     t.string "location"
-    t.string "type"
+    t.string "style"
   end
 
 end
