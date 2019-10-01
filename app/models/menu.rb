@@ -4,16 +4,23 @@ def pause
     print "            \r" # extra space to overwrite in case next sentence is short                                                                                                              
 end    
 
-def new_user
+def user_menu(input)
     system("clear")
-    puts " " * 3 + "*" * 70                                     # solid row line
-    3.times { puts " " * 3 + "*" * 2 + " " * 66 + "*" * 2 }     # spacer
-    puts " " * 3 + "*" * 2 + " " * 26 + "WELCOME HUMAN!" + " " * 26 + "*" * 2
-    4.times { puts " " * 3 + "*" * 2 + " " * 66 + "*" * 2 }     # spacer
-    puts " " * 3 + "*" * 70                                     # solid row line
-    input = STDIN.getch
-    puts input
-    pause
+    puts "Welcome #{input.capitalize}!"
+    puts "1 - See your climbs       2 - Find climbs in your area"
+    choise = STDIN.getch.to_s
+    #binding.pry
+    if choise == "1"
+        puts "HERE ARE YOUR CLIMBS"
+        pause
+        user_menu(input)
+    elsif choise == "2"
+        puts "THESE ARE CLIMBS IN YOUR AREA"
+        pause
+        user_menu(input)
+    else
+        return
+    end
 end
 
 
@@ -28,9 +35,13 @@ def main
     input.downcase!
 
     if input == "name"
-        puts "You entered your name!"
+        system("clear")
+        user_menu(input)
+        
+        
     elsif input == "new"
-        new_user
+        pause
+        return
     elsif input == "exit" 
         puts "YOU'RE GOING TO WISH YOU STAYED!"
         pause 
