@@ -4,11 +4,15 @@ class Climber < ActiveRecord::Base
 
 
     def list_most_popular_route
-
+        Route.all 
     end
 
     def retrieve_climbs
         Climb.all.select { |info| info.climber_id == self.id }
+    end
+
+    def most_climbed
+        routes.most_popular
     end
 
     def delete_climb                     ############## coming back to this l8er sk8er!! ###################
@@ -17,11 +21,16 @@ class Climber < ActiveRecord::Base
     end                                    ####################  end coming back  ################
 
     def climbs_by_location(location)
-        Route.all.select { |info| info.location == location }
+        routes.find_by(:location => location)
+        # Route.all.select { |info| info.location == location }
     end
 
     def climbs_by_my_location
-        Route.all.select { |info| info.location == self.location }
+        climbs_by_location(self.location)
+        # Route.all.select { |info| info.location == self.location }
     end
 
+    def self.helper
+        self.all.pluck(:name)
+    end
 end

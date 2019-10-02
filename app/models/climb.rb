@@ -1,4 +1,4 @@
 class Climb < ActiveRecord::Base
-    belongs_to :climbers
-    belongs_to :routes
+    belongs_to :climber
+    belongs_to :route
 end
