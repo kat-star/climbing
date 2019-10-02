@@ -2,22 +2,18 @@ class Route < ActiveRecord::Base
   has_many :climbs
   has_many :climbers, through: :climbs
 
-  def climbers #returns a list of climbers who have climbed this route instance
-    Climb.all.select { |a| a.route_id == self.id }
-  end
-
-  def names_of_routes #returns just a name of the routes
-    Route.all.map { |routy| routy.name }
-  end
-
   def best_climber
-    Climb.all.find do|climber| 
-      climber
-      binding.pry
+    climbers.order(skill_level: :desc).first
   end
 
+  def route_rating_average ##returns a big integer, but it's okay since we'll likely use it as a string for the user
+    climbs.average(:rating)
+  end
 
-  SELECT routes.id, AVG(climbs.rating) FROM 
+  def self.all_routes_rated ##returns a number
+    ratings = self.all.map { |one_route| one_route.route_rating_average.to_f }
 
+    routes = self.all.each_with_index.map { |one_route, i| "#{one_route.name} - Rating: #{ratings[i].round(2)}" } ##maybe this should go just in the front end??
+  end
 
 end
