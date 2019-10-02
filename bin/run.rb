@@ -6,3 +6,6 @@ main_menu
 
 # main
 
+# m = Menu.new
+# m.welcome
+# m.list_routes
