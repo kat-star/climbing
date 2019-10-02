@@ -2,6 +2,7 @@ class Climber < ActiveRecord::Base
     has_many :climbs
     has_many :routes, through: :climbs
 
+    def delete
 
     def list_most_popular_route
         Route.all 
