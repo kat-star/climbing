@@ -16,4 +16,4 @@ class Route < ActiveRecord::Base
     routes = self.all.each_with_index.map { |one_route, i| "#{one_route.name} - Rating: #{ratings[i].round(2)}" } ##maybe this should go just in the front end??
   end
 
-end
+end 
