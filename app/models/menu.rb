@@ -4,6 +4,113 @@ def pause
     print "            \r" # extra space to overwrite in case next sentence is short                                                                                                              
 end    
 
+
+def skill_menu(name, age)                       ########## BEGIN SKILL MENU - NEW USER SIGNUP ###########
+    skill = nil
+    system("clear")
+    puts " "
+    puts "Thank you #{name}, it's good to know you're #{age}."
+    puts "On a scale of 1 to 5, five being the best, how good are you?"
+    puts " "
+    print ": "
+
+    skill = STDIN.getch
+    skill = skill.to_i
+    
+    if skill.between?(1,5)
+        puts "YESSS!"
+        return skill
+    else
+        puts "Your choise in invalid.  Please try again."
+        pause
+        skill_menu(name, age)
+    end
+end                                         ############  END SKILL MENU - NEW USER SIGNUP ##########
+
+def location_menu(name, age, skill)             ###### BEGIN LOCATION MENU - NEW USER SIGNUP ##############
+    system("clear")
+    puts " "
+    puts "WOW #{name}, you're #{age} years old and a #{skill}?  That's great!"
+    puts "Last but not least, please select your location from the list below."
+    puts "1 - Bay Area      2 - Yosemite        3 - SoCal"
+    puts "      4 - New York    5 - International"
+    print ": "
+    location = STDIN.getch
+    
+    if location == "1"
+        return "Bay Area"
+    elsif location == "2"
+        return "Yosemite"
+    elsif location == "3"
+        return "SoCal"
+    elsif location == "4"
+        return "New York"
+    elsif location == "5"
+        return "International"
+    else
+        puts " "
+        puts "I'm sorry but that was not a valid entry.  Please try again."
+        pause
+        location_menu(name, age, skill)
+    end
+end                                                     ###########  END LOCATION - NEW USER SIGNUP ##########
+
+def confirmation_menu(name, age, skill, location)       ######## BEGIN CONFIRMATION - NEW USER SIGNUP ######
+    system("clear")
+    puts " "
+    puts "Fantastic!!!"
+    puts " "
+    puts "Just to be clear, let's make sure this is correct."
+    puts "Youre name is #{name}, you're #{age} years old."
+    puts "You'd consider your skill level a #{skill}, &"
+    puts "you're located in (or near) #{location}."
+    print "Correct? (Y/N): "
+    answer = STDIN.getch
+    puts " "
+    if answer == "y"
+        puts "Wonderful!  We can continue!"
+        return answer
+    elsif answer == "n"
+        puts "That's alright, we can start over!"
+        pause
+        signup_menu
+    else 
+        puts "You answer wan't 'y' or 'n', please try again."
+        pause
+        confirmation_menu(name, age, skill, location)
+    end
+end                                                     ############  END CONFIRMATION - NEWUSER ###########
+
+def signup_menu                                                #######  BEGIN NEWUSER SIGNUP###########
+    system("clear")
+    puts " "
+    puts "Welcome to the System.  Please enter your name!"
+    puts " "
+    print ": "
+    name = gets.chomp
+    
+    system("clear")
+    puts " "
+    puts "Hello #{name}!  Please tell us your age."
+    puts " "
+    print ": "
+    age = gets.chomp
+
+    skill_level = skill_menu(name, age)
+    location = location_menu(name, age, skill_level)
+    confirmation = confirmation_menu(name, age, skill_level, location)
+
+    if confirmation
+        new_user = Climber.create(name: name, age: age, location: location,  skill_level: skill_level)
+        puts "Welcome #{new_user.name}!  We're glad to have you!"
+        pause
+        user_menu(new_user)
+    else
+        puts "Something is terribly wrong, human."
+        pause
+    end
+end                                                             ############  END NEW USER SIGNUP ############
+
 def user_menu(user)                                           #####  BEGIN MAIN MENU ########
     system("clear")
     puts "Welcome #{user.name}!"
@@ -58,87 +165,6 @@ def user_menu(user)                                           #####  BEGIN MAIN 
     end
 end                                                         ##########  END MAIN MENU #############
 
-def skill_menu(name, age)                       ########## BEGIN SKILL MENU - NEW USER SIGNUP ###########
-    system("clear")
-    puts " "
-    puts "Thank you #{name}, it's good to know you're #{age}."
-    puts "On a scale of 1 to 5, five being the best, how good are you?"
-    puts " "
-    print ": "
-    skill = gets.chomp 
-    if skill
-        puts "YESSS!"
-        pause
-    else
-        puts "NOOOOO"
-        pause
-    end
-    return skill
-end                                         ############  END SKILL MENU - NEW USER SIGNUP ##########
-
-def location_menu(name, age, skill)             ###### BEGIN LOCATION MENU - NEW USER SIGNUP ##############
-    system("clear")
-    puts " "
-    puts "WOW #{name}, you're #{age} years old and a #{skill}?  That's great!"
-    puts "Last but not least, please select your location from the list below."
-    puts "1 - Bay Area      2 - Yosemite        3 - SoCal"
-    puts "      4 - New York    5 - International"
-    print ": "
-    location = STDIN.getch
-    #binding.pry
-    
-    if location == "1"
-        return "Bay Area"
-    elsif location == "2"
-        return "Yosemite"
-    elsif location == "3"
-        return "SoCal"
-    elsif location == "4"
-        return "New York"
-    elsif location == "5"
-        return "International"
-    else
-        puts " "
-        puts "YOU WASTE MY TIME, HUMAN!  NOW START OVER!"
-        pause
-        location_menu(name, age, skill)
-    end
-end                                                     ###########  END LOCATION - NEW USER SIGNUP ##########
-
-def signup_menu                                                #######  BEGIN NEWUSER SIGNUP###########
-    system("clear")
-    puts " "
-    puts "Welcome to the System.  Please enter your name!"
-    puts " "
-    print ": "
-    name = gets.chomp
-    
-    system("clear")
-    puts " "
-    puts "Hello #{name}!  Please tell us your age."
-    puts " "
-    print ": "
-    age = gets.chomp
-
-    skill = skill_menu(name, age)
-
-    location = location_menu(name, age, skill)
-
-    system("clear")
-    puts " "
-    puts "Fantastic!!!"
-    puts " "
-    puts "Just to be clear, let's make sure this is correct."
-    puts "Youre name is #{name}, you're #{age} years old."
-    puts "You'd consider your skill level a #{skill}, &"
-    puts "you're located in (or near) #{location}."
-    print "Correct? (Y/N): "
-    answer = STDIN.getch
-    puts " "
-    puts answer
-    pause
-end                                                             ############  END NEW USER SIGNUP ############
-
 def main_menu                                               ########## BEGIN STARTUP LOGIN ###########
     system("clear")
     puts " " * 30
@@ -148,7 +174,7 @@ def main_menu                                               ########## BEGIN STA
     print "BEGIN: "
     
     input = gets.chomp
-    #binding.pry   # possible solution = "Casimira Schmeler MD"
+                                                                 # possible solution = "Casimira Schmeler MD"
     
     if Climber.helper.include?(input) 
         user = Climber.find { |info| info.name == input }
