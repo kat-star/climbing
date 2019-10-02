@@ -20,6 +20,7 @@ end
     date_climbed: (Time.now - rand(15552000)).strftime('%m/%d/%Y')
   )
 end
+
 Route.destroy_all
 
 Route.create(name: "Beaver St. Wall", difficulty: 4, location: "Bay Area", style: "Free")
