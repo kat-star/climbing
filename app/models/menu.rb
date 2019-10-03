@@ -7,52 +7,98 @@ end
 def user_menu(user)                                           #####  BEGIN MAIN MENU ########
     system("clear")
     puts "Welcome #{user.name}!"
-    puts "1 - See your climbs           2 - Delete a climb"
+    puts "1 - View your climbs          2 - Delete a climb"
     puts "3 - Find climb by name        4 - Find climb by area"
-    puts "5 - List available routes     6 - List climbers who've climbed route"
+    puts "5 - List available routes     6 - List climbers who've climbed a route"
     puts "7 - List top climbers         8 - List routes by rating"
-    puts "X - Exit"
+    puts "9 - Edit a climb              X - Exit"
     puts " "
     print "Menu: "
-    choise = STDIN.getch.to_s
+    choice = STDIN.getch.to_s
     puts " "
-    if choise == "1"
-        puts "HERE ARE YOUR CLIMBS"
+    if choice == "1"
+        puts "Here is a list your climbs:"
+        puts "-----"
+        puts user.retrieve_climbs
         pause
         user_menu(user)
-    elsif choise == "2"
-        puts "DON'T FORGET THE PAST, HUMAN!"
+    elsif choice == "2"
+        puts "To delete a climb, select your climb below. Note-this action cannot be reversed."
+        puts "-----"
+        puts user.retrieve_climbs.each_with_index.map { |climb, i| "#{i + 1}. #{climb}" }
+        user_input = STDIN.getch
+        user.delete_climb(user_input)
         pause
         user_menu(user)
-    elsif choise == "3"
-        puts "THESE ARE CLIMBS LISTED BY NAME"
+    elsif choice == "3"
+        puts "What is the name of the route you would like to view?"
+        user_input = gets.chomp
+        route = Route.find_by_route_name(user_input)
+        puts "-----"
+        puts "Route Name: #{route.name}"
+        puts "Difficulty: #{route.difficulty}"
+        puts "Location: #{route.location}"
+        puts "Style: #{route.style}"
         pause
         user_menu(user)
-    elsif choise == "4"
+    elsif choice == "4"
         puts "THESE ARE CLIMBS LISTED BY AREA"
         pause
         user_menu(user)
-    elsif choise == "5"
+    elsif choice == "5"
         puts "THESE ARE ALL AVAILABLE ROUTES"
         pause
         user_menu(user)
-    elsif choise == "6"
-        puts "THESE ARE ALL THE CLIMBERS FOR A ROUTE"
+    elsif choice == "6"
+        puts "What location would you like to see a list of climbers?"
+        puts 
+        puts "1 - Bay Area      2 - Yosemite        3 - SoCal"
+        puts "      4 - New York    5 - International"
+      
+        location = case STDIN.getch
+        when '1'
+            'Bay Area'
+        when '2'
+            'Yosemite'
+        when '3'
+            'SoCal'
+        when '4'
+            'New York'
+        when '5'
+            'International'
+        end
+
+        if location
+            puts Climber.climbers_by_route_location(location)
+        else
+            puts "Invalid location. Please try again."
+        end
         pause
         user_menu(user)
-    elsif choise == "7"
+    elsif choice == "7"
         puts "THESE ARE THE TOP CLIMBERS"
         pause
         user_menu(user)
-    elsif choise == "8"
-        puts "THESE ARE THE CLIMBS BY RATING"
+    elsif choice == "8"
+        puts "Highest-rated routes"
+        puts "-----"
+        puts Route.highest_rated
+        pause
+        puts
+        user_menu(user)
+    elsif choice == '9'
+        puts 'To update a climb, select your climb below.'
+        puts "-----"
+        puts user.retrieve_climbs.each_with_index.map { |climb, i| "#{i  + 1}. #{climb}" }
+        user_input = STDIN.getch
+        user.update_climb(user_input)
         pause
         user_menu(user)
-    elsif choise == "x" || choise == "X"
+    elsif choice == "x" || choice == "X"
         puts "Goodbye #{user.name}!"
         return
     else
-        puts "YOU TYPED SOMEHTING I DON'T UNDERSTAND, HUMAN!!!"
+        puts "YOU TYPED SOMETHING I DON'T UNDERSTAND, HUMAN!!!"
         pause
         user_menu(user)
     end
@@ -149,10 +195,9 @@ def main_menu                                               ########## BEGIN STA
     
     input = gets.chomp
     #binding.pry   # possible solution = "Casimira Schmeler MD"
-    
-    if Climber.helper.include?(input) 
-        user = Climber.find { |info| info.name == input }
-        user_menu(user)
+   
+    if climber = Climber.find_by(name: input)
+        user_menu(climber)
     elsif input == "new"
         signup_menu
 
