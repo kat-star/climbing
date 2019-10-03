@@ -4,6 +4,6 @@ class Climb < ActiveRecord::Base
 
 
     def most_popular_climb
-        Climb.order(rating:, :desc).first
+        Climb.order(rating:  :desc).first
     end
 end

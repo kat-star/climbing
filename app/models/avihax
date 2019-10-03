@@ -1,0 +1,8 @@
+User
+  .joins(:solutions)
+  .select("users.*, count(solutions.id) as scount")
+  .group("users.id")
+  .order("scount DESC")
+
+
+Route
