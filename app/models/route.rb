@@ -13,32 +13,35 @@ class Route < ActiveRecord::Base
   
   def self.most_popular
     joins(:climbs).select("routes.*, count(routes.id) as rcount").group("routes.id").order("rcount DESC").first
-    
   end
 
   def self.highest_rated
-    # sort by highest rating
+    routes = joins(:climbs).select("routes.*, avg(climbs.rating) as climby").group("routes.id").order("climby DESC")
+
+    mapped_routes = routes.map do |route| 
+      "Route Name: #{route.name}, Difficulty: #{route.difficulty}, Location: #{route.location}, Style: #{route.style}" 
+    end
+    mapped_routes.take(5)
   end
 
   def best_climber
     climbers.order(skill_level: :desc).first
   end
 
-  def route_rating_average ##returns a big integer, but it's okay since we'll likely use it as a string for the user
+  def route_rating_average 
     climbs.average(:rating)
   end
 
-  def self.all_routes_rated ##returns a number
-    # ratings = self.all.map { |one_route| one_route.route_rating_average.to_f }
+  def self.all_routes_rated
 
-    # routes = self.all.each_with_index.map { |one_route, i|    ##maybe this should go just in the front end??
-    #   "#{one_route.name} - Rating: #{ratings[i].round(2)}" 
-    #   binding.pry
-    # } 
-  
-    ####  copied from 'most popular'
-    joins(:climbs).select("routes.*, count(routes.id) as rcount").group("routes.id").order("rcount DESC")
+    Route.select("routes.*, avg(climbs.rating) as climb_rating").group("routes.id").joins(:climbs).order("climb_rating DESC").map do |route|
+      "#{route.name} - Rating: #{route.climb_rating.round(2)}"
+    end
 
+  end
+
+  def self.find_by_route_name(route_name) 
+    route = self.find_by name: route_name
   end
 
 end 
