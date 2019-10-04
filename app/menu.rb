@@ -1,3 +1,5 @@
+###Comment your code (one line above method)
+
 def main_menu                                     ########## BEGIN STARTUP LOGIN ###########
     system('clear')
     puts 
@@ -57,7 +59,9 @@ def user_menu(user)                                           #####  BEGIN MAIN 
     puts '-' *60
     puts "5 - List All Routes           6 - Find Routes By Location"
     puts "7 - Find Climb Route by Name  8 - Find Climbers By Location"
-    puts "9 - List Routes By Rating     X - Exit"
+    puts "9 - List Routes By Rating     0 - Add a New Route"
+    puts 
+    puts 'X - Exit'
     puts 
     print 'Menu Selection: '
 
@@ -156,9 +160,14 @@ def user_menu(user)                                           #####  BEGIN MAIN 
         puts
         print 'What is the name of the route you would like to view: '
         user_input = gets.chomp
-        route = Route.find_by_route_name(user_input)
-        puts '-' * 60
-        puts "#{route.name} - Difficulty: #{route.difficulty}, Location: #{route.location}, Style: #{route.style}"
+
+        if !Route.find_by_route_name(user_input)
+            puts 'That is not a valid location. Please try again.'
+        else
+            route = Route.find_by_route_name(user_input)
+            puts '-' * 60
+            puts "#{route.name} - Difficulty: #{route.difficulty}, Location: #{route.location}, Style: #{route.style}"
+        end
         puts
         pause
         user_menu(user)
@@ -195,6 +204,30 @@ def user_menu(user)                                           #####  BEGIN MAIN 
         puts
         pause
         user_menu(user)
+    elsif choice == '0'
+        puts
+        puts 'To add a new route, please enter the following route details:'
+        puts
+        print 'Route name: '
+        route_input = gets.chomp
+        puts
+        print "What is the difficulty level? Choose 1-5: "
+        difficulty_input = STDIN.getch.to_i
+        puts
+        puts
+        puts 'Choose the location from the following:' 
+        print 'Bay Area, Yosemite, SoCal, New York, or International: '
+        location_input = gets.chomp
+        puts
+        print 'What is the climb style? '
+        style_input = gets.chomp
+        puts
+        Route.create(name: route_input, difficulty: difficulty_input, location: location_input, style: style_input)
+        puts 
+        puts "Thanks for contributing to our routes database! The new route has been added."
+        puts
+        pause
+        user_menu(user)    
     elsif choice == 'x' || choice == 'X'
         puts "Goodbye #{user.name}!"
         return
@@ -315,3 +348,6 @@ def signup_menu                              #######  BEGIN NEWUSER SIGNUP######
     end
 end                                          ############  END NEW USER SIGNUP ############
 
+def add_new_route
+
+end

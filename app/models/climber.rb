@@ -27,7 +27,9 @@ class Climber < ActiveRecord::Base
     routes.find_by(:location => location)
   end
 
-  def self.climbers_by_route_location(location)
+
+    #a list of climbers by a route's location (climbers who have climbed Bay Area routes)
+   def self.climbers_by_route_location(location)
       Climber.select('climbers.*').distinct.joins(:routes).where('routes.location = ?', location).map do |climber|
           "#{climber.name} - Age: #{climber.age}, Their Location: #{climber.location}, Skill Level: #{climber.skill_level}"
       end
@@ -36,5 +38,11 @@ class Climber < ActiveRecord::Base
   def climbs_by_my_location
       climbs_by_location(self.location)
   end
+
+  # def self.climbers_by_their_location(location)
+  #   Climber.select('climbers.*').where('location = ?', location).map do |climber|
+  #      "#{climber.name} - Age: #{climber.age}, Their Location: #{climber.location}, Skill Level: #{climber.skill_level}"
+  #   end
+  # end
 
 end
