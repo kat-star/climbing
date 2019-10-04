@@ -3,32 +3,24 @@ class Climber < ActiveRecord::Base
   has_many :routes, through: :climbs
 
   def retrieve_climbs
-    my_climbs = climbs.pluck(:route_id)
-    my_info = Route.select { |one_route| my_climbs.include?(one_route.id)}
-    dates = climbs.map { |climb| climb.date_climbed}
-
-    my_info.each_with_index.map { |info, i| "#{info.name} - #{dates[i]}" }
-  end
-
-  def most_climbed
-    routes.most_popular
+    climbs.includes(:route).order('routes.name').map do |climb|
+      "#{climb.route.name} - Date Climbed: #{climb.date_climbed}, My Rating: #{climb.rating}"
+    end
   end
 
   def delete_climb(input)  
     num_delete = input.to_i - 1
     if climbs.length == 0
-      "There are no climbs to delete."
+      'There are no climbs to delete.'
     else
       climbs[num_delete].destroy
     end
   end                                    
 
-  def update_climb(input)
-    num_update = input.to_i - 1
-    puts "You can update your climb rating. What is the new rating (1-5)?"
-    climb_rating =  STDIN.getch
-    climbs[num_update].update(rating: :climb_rating)
-    puts "Your climb rating has been updated to #{climb_rating}."
+  def update_climb(input, rating)
+    input = input.to_i - 1
+    climbs[input].update(rating: rating)
+    puts "Your climb rating has been updated to #{rating}."
   end
 
   def climbs_by_location(location)
@@ -36,17 +28,13 @@ class Climber < ActiveRecord::Base
   end
 
   def self.climbers_by_route_location(location)
-      Climber.select("climbers.*").distinct.joins(:routes).where("routes.location = ?", location).map do |climber|
+      Climber.select('climbers.*').distinct.joins(:routes).where('routes.location = ?', location).map do |climber|
           "#{climber.name} - Age: #{climber.age}, Their Location: #{climber.location}, Skill Level: #{climber.skill_level}"
       end
   end
 
   def climbs_by_my_location
       climbs_by_location(self.location)
-  end
-
-  def self.helper
-      self.all.pluck(:name)
   end
 
 end
