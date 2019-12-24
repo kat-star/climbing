@@ -9,8 +9,6 @@ Our User (Climber) Stories:
 3. Climbers can look at other climbers from various locations
 4. Climbers can view routes by rating
 
-####add a GIF or screenshot
-
 
 How to install and run the program:
 
